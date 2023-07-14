@@ -1,23 +1,34 @@
 package com.airfranceklm.fasttrack.assignment.controller;
 
-import java.util.Arrays;
 import java.util.List;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-
 import com.airfranceklm.fasttrack.assignment.resources.Holiday;
+import com.airfranceklm.fasttrack.assignment.service.HolidayService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 
-@Controller
+@RestController
 @RequestMapping("/holidays")
 public class HolidaysApi {
 
-    @RequestMapping(method = RequestMethod.GET)
-    public ResponseEntity<List<Holiday>> getHolidays() {
-        return new ResponseEntity<List<Holiday>>(Arrays.asList(new Holiday("FIXME")), HttpStatus.OK);
+    @Autowired
+    private HolidayService holidayService;
+
+    @GetMapping(path = "")
+    @ResponseBody
+    public List<Holiday> getHolidaysOverview() {
+        return this.holidayService.getHolidaysOverview();
     }
 
+    @PostMapping(path = "")
+    @ResponseBody
+    public Holiday scheduleHoliday(@RequestBody Holiday holiday) {
+        return this.holidayService.scheduleHoliday(holiday);
+    }
+
+    @DeleteMapping(path = "{holidayId}")
+    @ResponseBody
+    public Holiday cancelHoliday(@PathVariable String holidayId) {
+        return this.holidayService.cancelHoliday(holidayId);
+    }
 }
